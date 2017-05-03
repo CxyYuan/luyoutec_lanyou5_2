@@ -1,0 +1,138 @@
+<!-- Bootstrap core CSS -->
+<link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<ion-header-bar class="bar-dark" style="height: 48px;text-align: center">
+    <div class="buttons">
+        <button class="button button-icon icon ion-ios-arrow-left" onclick="JavaScript:history.back()">
+        </button>
+    </div>
+    <div class="h1 title" style="font-size: 18px;margin-top: 2px">提现</div>
+
+</ion-header-bar>
+<ion-view view-title="提现">
+
+    <ion-content class="accountcontent" >
+        <body  >
+        <div class="accountcontent" >
+
+            <!--下拉刷新-->
+            <ion-refresher
+                    pulling-text="下拉刷新..."
+                    on-refresh="refreshTaskAccount(1)">
+            </ion-refresher>
+
+            <!--头部ID区域-->
+            <div class="accounthead">
+                <div class="accountID">
+                    <img src="/images/app/boot1.png" class="accountimg">
+                    <h4 style="font-weight:400;">ID:&nbsp;<span style="color:black">{{temUserInfo.userCode}}</span></h4>
+                </div>
+            </div>
+
+            <!--支付宝账号区域-->
+            <div class="pay">
+                <div class="paytext">
+                    <span class="accountpay">支付宝账号
+                       <span ng-show="temUserInfo.aliAccount == undefined || temUserInfo.aliAccount.length == 0" style="width:50%;height:3.2em;float:right;margin-right: 1em;" ng-click="showConfirm()">
+                           <span style="color:#999999;margin-left:60%; "> 点击绑定</span>
+                       </span>
+                        <span ng-show="temUserInfo.aliAccount != undefined || temUserInfo.aliAccount.length > 0 " style="width:50%;height:3.2em;float:right;margin-right: 4%;">
+                           <span style="color:#999999;margin-right: 4%;display: inline-block;float: right"> {{temUserInfo.aliAccount}}</span>
+                       </span>
+                    </span>
+                </div>
+            </div>
+
+            <!--手机号绑定区域-->
+            <div class="pay">
+                <div class="paytext">
+                    <span class="accountpay">手机号
+                       <span ng-show="temUserInfo.phoneNumber == undefined || temUserInfo.phoneNumber.length == 0" style="width:50%;height:3.2em;float:right;margin-right: 1em;" ng-click="showPhoneConfirm('绑定手机号,帐号不丢失')">
+                           <span style="color:#999999;margin-left:50%; "> 绑定 / 登陆</span>
+                       </span>
+                        <span ng-show="temUserInfo.phoneNumber.length > 0 " ng-click="showPhoneConfirm('绑定手机号,帐号不丢失')" style="width:50%;height:3.2em;float:right;margin-right: 4%;">
+                           <span style="color:#999999;margin-right: 4%;display: inline-block;float: right"> {{temUserInfo.phoneNumber}}</span>
+                       </span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="pay">
+                <div class="paytext">
+                    <span class="accountpay">姓名
+                       <span ng-show="temUserInfo.aliPayUserName == undefined || temUserInfo.aliPayUserName.length == 0" style="width:50%;height:3.2em;float:right;margin-right: 1em;" ng-click="showaliPayUserNameConfirm('绑定真实姓名')">
+                           <span style="color:#999999;margin-left:60%; "> 点击绑定</span>
+                       </span>
+                        <span ng-show="temUserInfo.aliPayUserName != undefined || temUserInfo.aliPayUserName.length > 0" style="width:50%;height:3.2em;float:right;margin-right: 4%;">
+                           <span style="color:#999999;margin-right: 4%;display: inline-block;float: right"> {{temUserInfo.aliPayUserName}}</span>
+                       </span>
+                    </span>
+                </div>
+            </div>
+
+            <!--个人资产区域-->
+            <div class="personal">
+                <div class="deposit">
+                    <span style="font-size: 2.5em;color:red;margin-left: 5%;font-weight: 300;">{{temUserInfo.canWithdrawMoney.toFixed(2)}}</span>
+                    <h5 style="font-size: 12px;;margin-top: -0.3em;font-weight:400;">可提现资产
+                        <span style="float:right;margin-top: -1.1em;color: red;margin-right:8.7%;font-size: 14px;font-weight:400;" ng-click="Withdraw()">马上提现</span>
+                    </h5>
+                    <img src="images/app/right.png" style="float:right;margin-top: -3.6em;margin-right: 1em;width: 0.5em;">
+                    <hr size="0.1"  style="color: #999999;width:95%;margin-left: 5%;margin-top: -0.6em;" >
+                </div>
+
+
+                <div class="depositsecond" style="margin-top: -1em;">
+                    <span style="font-size: 2em;color:black;margin-left: 5%;font-weight: 300;">{{temUserInfo.surplusMoney}}</span><br>
+                    <h5 style="font-size:12px;font-weight:400;">提现后账户余额
+                        <span style="float:right;margin-top: -1.4em;color: #999999;margin-right: 5%;font-weight:400;">账户余额满{{temUserInfo.minUserWithDrawRMB}}元可以再次提现</span></h5>
+
+                </div>
+            </div>
+
+            <!--推广大使区域-->
+            <div ng-if="temUserInfo.isMarketingUser == true" class="ui red raised segment">
+                <div class="ui blue horizontal label">推广大使</div>
+                非常感谢您帮忙推广小马
+                <div class="ui divided selection list">
+                    <a class="item">
+                        <div class="ui red horizontal label">奖励信息</div>
+                        <ul style="margin-left: 10px" class="ui mini list">
+                            <li ng-repeat="rewardMessage in rewardMessages">{{rewardMessage}}</li>
+                        </ul>
+                    </a>
+                    <a class="item small">
+                        <div class="ui purple horizontal label">领取奖励备注</div>
+                        <ul style="margin-left: 10px;margin-top: 5px" class="ui small list">
+                            <li>师徒奖励和推广奖励可同步领取,奖励多多哦</li>
+                            <li>达到条件后即可领取奖励,可多次领取</li>
+                            <li>奖励单价以总推广徒弟数为标准</li>
+                            <li>再次领取奖励时,之前徒弟不计入再次计算奖励人数</li>
+                        </ul>
+                    </a>
+                </div>
+
+                <button class="ui bottom right attached red button" ng-click="getMarketingReward()">
+                    领取推广大使奖励
+                </button>
+
+            </div>
+
+            <!--申请提现区域-->
+
+            <div class="apply" style="height: 50px;padding: 15px 10px">
+                <span style="color:#67bdff;font-size: 14px;">{{temUserInfo.withdrawMoney.toFixed(2)}}元申请提现中...(支付宝提现收取{{temUserInfo.chargeRate}}%手续费)</span>
+            </div>
+            <!--底部标注-->
+            <div class="accountfoot">
+                <span style="color:#999999;font-size: 1em;margin-left: 5%;line-height: 3em; ">*提现金额会在1~2个工作日内到账</span>
+            </div>
+
+
+
+            </div>
+        </body>
+    </ion-content>
+</ion-view>

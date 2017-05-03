@@ -1,0 +1,93 @@
+<ion-view xmlns="http://www.w3.org/1999/html">
+    <!--<ion-nav-bar class="bar-dark bar-color-light">-->
+        <!--<ion-nav-back-button>-->
+            <!--返回-->
+        <!--</ion-nav-back-button>-->
+    <!--</ion-nav-bar>-->
+    <!--<ion-nav-buttons>-->
+        <!--<button class="button button-light btn1 " ng-show="taskType == 1" style="border: 1px solid white;line-height:20px;" ng-click="switchTaskType(1, -1)">评论</button>-->
+        <!--<button class="button button-dark btn2" ng-show="taskType == 1" style="border: 1px solid white;line-height:20px;"  ng-click="switchTaskType(2, -1)">下载</button>-->
+        <!--<button class="button button-dark btn1 " ng-show="taskType == 2" style="border: 1px solid white;line-height:20px;" ng-click="switchTaskType(1, -1)">评论</button>-->
+        <!--<button class="button button-light btn2" ng-show="taskType == 2" style="border: 1px solid white;line-height:20px;"  ng-click="switchTaskType(2, -1)">下载</button>-->
+    <!--</ion-nav-buttons>-->
+
+
+    <ion-content style="background-color: #F5F5F5;">
+        <!--loading-->
+        <!--<ion-spinner ng-show="downloadTasks.length == 0 && downloadLoading == true && taskType == 1" icon="ripple" class="spinner-assertive"></ion-spinner>-->
+        <!--<ion-spinner ng-show="commentTasks.length == 0 && commentLoading == true && taskType == 2" icon="ripple" class="spinner-assertive"></ion-spinner>-->
+
+        <!--下拉刷新-->
+        <ion-refresher
+                pulling-text="下拉刷新..."
+                on-refresh="refreshTaskHall()">
+        </ion-refresher>
+
+        <!--下载页面相关-->
+        <!--头部-->
+        <div ng-if="taskType == 1">
+            <div class="customHeader" style="padding-top: 0.4em">
+                <div class="text">
+                    <h4 style="color:white;">💞💞 师徒奖励升级 🎉🎉  🎉🎉  🎉🎉  🎉🎉 <br> 💖每个徒弟前{{masterConfig.masterRMBPreCount}}单任务,你都可以获得{{masterConfig.masterRMBPreRMB}}元/每单💖
+                        <br>先打开App试玩后再评论🍀,无卡机不能做任务</h4>
+                </div>
+            </div>
+            <!--灰色背景-->
+
+            <!--虚线框-->
+            <!--<div class="dashed" style="height: auto;">-->
+                <!--<h4 style="color: red">&nbsp;评论图离打开App的截图时间间隔三分钟</h4>-->
+                <!--<h4 style="margin-top: -5px">&nbsp;App下载后需保留3天,卸载App前需再次打开</h4>-->
+            <!--</div>-->
+
+            <div class="dashed" style="height: auto;border-color: red">
+                <div style="padding: 8px 8px">
+                    <span style="font-size: 1em;color:red;display: inline-block">**注意注意,现在支付宝转账需要填写用户的姓名,请大家去提现中心填写自己的名字!方便我们能尽快转账给你们</span>
+                </div>
+            </div>
+
+            <div class="dashed" style="height: auto;" ng-if="downloadTasks.length == 0 && commentTasks.length == 0">
+                <h4 >&nbsp;您太厉害了,任务都被你做完了,么么哒!👄👄👄👄👄</h4>
+            </div>
+
+
+            <!--ionic card-->
+            <div class="ion-list" ng-repeat="task in downloadTasks">
+                <!--<div class="item item-text-wrap">-->
+                <!--{{task.appName}}-->
+                <!--</div>-->
+                <ion-item href="#/tab/task/{{task.taskId}}"
+                           ng-class="{true:'item-head-notext ion-item card', false: 'item-head ion-item card'}[ task.extraDemandArray.length==0]" type="item-text-wrap" >
+                    <div style="margin-top: -0.7em;">
+                        <img ng-src="{{task.appIcon}}" class="cardicon">
+                        <div class="character" style=" ">
+                           {{task.appName}}
+                        </div>
+                        <span class = "cardplay typegray" >剩余{{task.remainCount}}条</span>
+                        <span class=" typeblue">{{task.taskType}}</span>
+                        <!--<span class=" typeblue" ng-hide="task.formattedPrice==null" >{{task.formattedPrice}}付费应用</span>-->
+                        <!--<span class=" typefree" ng-show="task.formattedPrice==null" >免费应用</span>-->
+                        <br><br>
+                        <span ng-class="{true:'cardwordGray',false:'cardword'}[task.remainCount == 0]">
+                            <span style="font-size: 0.6em;">+</span>
+                            <span style="font-weight: 500;">{{task.doTaskPrice.toFixed(2)}}</span>
+                            <span style="font-size: 0.6em;">元</span>
+                        </span>
+                        <br><br>
+                        <span ng-show="task.appPrice != undefined" class="cardtextright typeblue" style="margin-top: -2em;">task.appPrice</span>
+                        <div class="note" >
+                            <div class="cardtext annotation" ng-repeat="extraDes in task.extraDemandArray" >
+                                {{($index + 1) + '.' +  extraDes}}
+                            </div>
+                            <div style="height:0.01em;"></div>
+                        </div>
+                    </div>
+                </ion-item>
+            </div>
+        </div>
+
+        <ion-infinite-scroll ng-if="downloadHasMore == true" on-infinite="loadMore()" distance="1%" ></ion-infinite-scroll>
+        <!--<ion-infinite-scroll ng-if="commentHasMore == true && taskType == 2" on-infinite="loadMore()" distance="1%" ></ion-infinite-scroll>-->
+
+    </ion-content>
+</ion-view>

@@ -1,0 +1,205 @@
+
+<ion-view view-title="首页">
+    <ion-content ng-click="unselectUrl()">
+        <ion-card ng-if="isIOSDevice != 1" >
+
+            <div style=" background: linear-gradient(#41a4fa, #357cf0);position: absolute;top: 0;width: 100%;">
+                <ion-card-header>
+                    <div class="xiaoma-head" >
+                        <span style="font-size: 20px">小马试客</span>
+                        <hr style="color:white;width:15px;z-index: 99;">
+                   <span style="font-size: 16px;line-height: 26px;"> 用手机按要求下载APP<br>
+                    轻松赚取零花钱<br></span>
+                        <img src="images/app/card-head.png" style="margin-top: 65px;">
+                    </div>
+                </ion-card-header>
+                <div class="xiaoma-content">
+                    <span style="color: white;font-size: 16px;line-height: 43px;">抱歉,非IOS用户无法使用</span>
+                </div>
+                <ion-card-content >
+
+                </ion-card-content>
+            </div>
+        </ion-card>
+
+        <!--IOS浏览器鉴别-->
+
+        <ion-card ng-if="isIOSDevice == 1 && isiPhoneSafari != 1" >
+
+            <div style=" background: linear-gradient(#41a4fa, #357cf0);position: absolute;top: 0;width: 100%;">
+                <ion-card-header>
+                    <div class="xiaoma-head" >
+                        <ion-card-content>
+                            <div class="xiaoma-content" style="margin-top: -36px;height:800px;">
+
+                                <span style="font-size: 13px;">需要在Safari中打开</span><br>
+                                <img src="images/app/card-con.png" style="margin-top: 10px;zoom:0.7"><br>
+                                <button class="btn safari-btn" style="margin-top: 5px;"
+                                        onclick="window.location.href = 'safari://www.yema.leanapp.cn/app'">
+                                    点击右上角选择在safara中打开
+                                </button><br><br>
+                                <span style="font-size: 20px;margin-top: 40px;display: inline-block">小马试客</span>
+                                <hr style="color:white;width:15px;">
+                   <span style="font-size: 16px;line-height: 26px;"> 用手机按要求下载APP<br>
+                    轻松赚取零花钱<br></span>
+                                <img src="images/app/righttop.png" style="position: absolute;top:1em;right:1em;zoom:0.6;">
+
+                            </div>
+                        </ion-card-content>
+
+                    </div>
+                </ion-card-header>
+
+
+            </div>
+        </ion-card>
+
+        <!--主要界面-->
+        <div ng-if="isIOSDevice == 1 && isiPhoneSafari == 1" >
+            <!--下拉刷新-->
+            <ion-refresher
+            pulling-text="下拉刷新..."
+            on-refresh="refreshHome(1)">
+            </ion-refresher>
+
+            <div class="head">
+                <div class="text">
+                    <br>
+                    <h4 style="color:white;">今日收益(元)
+                        <span style="font-size: 14px;float: right;margin-right: 5%;color: white;font-weight: 400;margin-top: 0.1em;">邀请码:{{userInfoObject.userCode}}</span></h4>
+                </div>
+                <span class="headh1" ng-show="userInfoObject.todayMoney !== 0">{{userInfoObject.todayMoney.toFixed(2)}}</span>
+                <span class="headh1" ng-show="userInfoObject.todayMoney == 0">竟然没有</span>
+            </div>
+
+            <div class="blocktwo">
+                <div style="border-top:1px solid #93adfa;width:94%;position: absolute;right :0;"></div>
+                <!--<hr style="border:0.01em #93adfa solid;  width: 94%;position: absolute;right:0;top:7.7em;" >-->
+                <div ng-show="userInfoObject.userCode != undefined" style=""><br>
+                    <img src="/images/app/boot.png" class="img-circle" style="width: 3em;float:left;margin-top: 0.2em;margin-left: 5%;">
+                    <h5>账户余额:{{userInfoObject.currentMoney.toFixed(2)}}<br>
+                        <span>总共收益:{{userInfoObject.totalMoney.toFixed(2)}}</span>
+                    </h5>
+                    <div style="font-size: 1em;float: right;margin-top: 1.1em;margin-right: 5%;">
+                        <span class="glyphicon glyphicon-credit-card" style="font-size: 0.8em;"></span>
+                        <a href="/app#/tab/rmbDetail" style="color: #eaf5ff;"><span style="font-size: 1em;color: #eaf5ff;">资产明细</span></a>
+                        <img src="/images/app/arrowhead.svg" style="width:1.2em;margin-top: -0.2em;">
+                        </span>
+                    </div>
+                </div>
+                <p ng-show="errorId != 0 && message.length > 0">服务器错误:{{message}}</p>
+            </div>
+
+            <h4 style="margin-left: 10px" class="ui header">
+                <i class="users icon"></i>
+                <div class="content">
+                    你已经有{{userInfoObject.apprenticeCount}}个徒弟
+                    <div class="sub header">他们累计帮你赚取了{{userInfoObject.apprenticeMoney.toFixed(2)}}</div>
+                </div>
+            </h4>
+
+
+            <div class="ui info mini message">
+                <!--<i class="close icon"></i>-->
+                <div class="header">
+                    💞💞 师徒奖励升级 🎉🎉
+                </div>
+                <ul class="list">
+                    <li>每个徒弟前{{masterConfig.masterRMBPreCount}}单任务,你都可以获得{{masterConfig.masterRMBPreRMB}}元/每单</li>
+                    <li>{{masterConfig.masterRMBPreCount}}单以后获得徒弟佣金{{masterConfig.masterRMBRateDisplay}}%的奖励</li>
+                    <li>由于近期作弊者过多,支付宝帐号绑定之后不能更改,要更改私聊小马官方群群主</li>
+                    <li>推广大使徒弟,提现最低金额为5元,或者5的整数倍</li>
+                </ul>
+            </div>
+
+            <!--收徒-->
+
+            <!--<div style="margin-left: 10px; margin-top: 10px" class="ui right labeled disabled left icon mini input">-->
+                <!--<i class="copy icon"></i>-->
+                <!--<input type="text" ng-model="inviteUrl" placeholder="Enter tags">-->
+                <!--<a class="ui tag label">-->
+                    <!--长按复制-->
+                <!--</a>-->
+            <!--</div>-->
+
+            <div style="text-align: center;margin-top: 13px;margin-bottom: 20px">
+                <span class="label-in">如何收徒? 长按选择文本 共享给QQ/微信好友</span>
+                <textarea style="width:76%;height:4em;margin-left: 12%;margin-top: 1.2em;
+                    padding-top: 0.65em;padding-left: 0.8em;padding-right: 0.8em; color: #6435C9;text-align: center"
+                          type="text" disabled="true" id="inviteEle" placeholder="输入他人邀请码"  ng-model="inviteUrl" ></textarea>
+            </div>
+
+            <!--<div class="ui red raised segment">-->
+                <!--<div class="ui blue horizontal label">推广大使</div>-->
+                <!--帮助小马做推广,得额外现金补贴-->
+                <!--<div class="ui divided selection list">-->
+                    <!--<a class="item">-->
+                        <!--<div class="ui red horizontal label">奖励</div>-->
+                        <!--推广大师额外奖励-->
+                        <!--<ul style="margin-left: 10px" class="ui mini list">-->
+                            <!--<li>有效徒弟20-49人,每位徒弟得0.4元奖励</li>-->
+                            <!--<li>有效徒弟50-99人,每位徒弟得0.5元奖励</li>-->
+                            <!--<li>有效徒弟100-199人,每位徒弟得0.6元奖励</li>-->
+                            <!--<li>有效徒弟200-399人,每位徒弟得0.7元奖励</li>-->
+                            <!--<li>有效徒弟400-699人,每位徒弟得0.8元奖励</li>-->
+                            <!--<li>有效徒弟700-999人,每位徒弟得0.9元奖励</li>-->
+                            <!--<li>有效徒弟超1000人,每位徒弟得1元奖励</li>-->
+                        <!--</ul>-->
+                    <!--</a>-->
+                    <!--<a class="item">-->
+                        <!--<div class="ui purple horizontal label">解释</div>-->
+                        <!--何为有效徒弟-->
+                        <!--<ul style="margin-left: 10px" class="ui mini list">-->
+                            <!--<li>徒弟成功完成1条小马任务</li>-->
+                            <!--<li>徒弟绑定手机号</li>-->
+                            <!--<li>徒弟把小马图标添加到桌面</li>-->
+                        <!--</ul>-->
+                    <!--</a>-->
+                    <!--<a class="item">-->
+                        <!--<div class="ui teal horizontal label">徒弟福利</div>-->
+                        <!--<span class="ui mini list">-->
+                            <!--不满10元也可提现不受限制-->
+                        <!--</span>-->
+                    <!--</a>-->
+                <!--</div>-->
+
+                <!--<button class="ui bottom right attached red button" ng-click="becomeMaketingPeople()"-->
+                        <!--ng-if="errorId != 0 && userInfoObject.isMarketingUser != true">-->
+                    <!--成为推广大使-->
+                <!--</button>-->
+
+                <!--<button class="ui bottom right attached red button" disabled-->
+                        <!--ng-if="errorId == 0 || userInfoObject.isMarketingUser == true">-->
+                    <!--您已成为推广大使-->
+                <!--</button>-->
+
+            <!--</div>-->
+
+            <!--无师傅-->
+            <div ng-show="userInfoObject.masterCode == undefined || userInfoObject.masterCode.length == 0"
+                 style="margin-left: 10px" class="ui right labeled left icon mini input">
+                <i class="student icon"></i>
+                <input type="text" placeholder="输入师傅的邀请码" ng-model="ctrlScope.inputMasterCode">
+                <a class="ui tag label" ng-click="bindMaster()">
+                     提交
+                </a>
+            </div>
+
+            <!--有师傅-->
+            <div ng-show="userInfoObject.masterCode != undefined && userInfoObject.masterCode.length > 0"
+                 style="margin-left: 20px" class="ui labeled disabled input">
+                <div class="ui label">
+                    我的师傅
+                </div>
+                <input type="text" ng-model="userInfoObject.masterCode">
+            </div>
+
+            <a style="margin-left: 20px" class="ui pointing blue basic label">官方群 00000000(小马资讯,用户答疑,意见反馈)</a>
+            <a style="margin-left: 20px" class="ui pointing blue basic label">小马下午2点-3点左右释放大量任务(工作日)</a>
+
+            <div style="height:2em;"></div>
+        </div>
+
+    </ion-content>
+
+</ion-view>
